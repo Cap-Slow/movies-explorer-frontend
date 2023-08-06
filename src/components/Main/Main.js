@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 function Main() {
   const navigate = useNavigate();
   return (
-    <main className="main">
+    <>
       <Header isLoggedIn={false}>
         <nav className="header__nav-container">
           <button
@@ -32,14 +32,16 @@ function Main() {
           </button>
         </nav>
       </Header>
-      <Promo />
-      <NavTab />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
-      <Portfolio />
+      <main className="main">
+        <Promo />
+        <NavTab />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+        <Portfolio />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
 
