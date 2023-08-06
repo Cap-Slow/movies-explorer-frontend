@@ -5,9 +5,9 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Footer from '../Footer/Footer';
-import firstImagePath from '../../images/movie-placeholders/33slova.png';
-import secondImagePath from '../../images/movie-placeholders/second-image.png';
-import thirdImagePath from '../../images/movie-placeholders/third-image.png';
+import firstImagePath from '../../images/movie-placeholders/33slova.jpg';
+import secondImagePath from '../../images/movie-placeholders/second-image.jpg';
+import thirdImagePath from '../../images/movie-placeholders/third-image.jpg';
 
 function SavedMovies({ isMenuOpen, closeMenu, onMenuOpen }) {
   return (
