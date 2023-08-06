@@ -49,6 +49,7 @@ function Profile({ onMenuOpen, isMenuOpen, closeMenu }) {
                 disabled={!isEditableForm}
                 onChange={handleNameChange}
                 minLength="2"
+                placeholder="Введите имя"
               />
             </div>
             <div className="profile__row-container">
@@ -60,6 +61,7 @@ function Profile({ onMenuOpen, isMenuOpen, closeMenu }) {
                 value={email}
                 disabled={!isEditableForm}
                 onChange={handleEmailChange}
+                placeholder="Введите E-mail"
               />
             </div>
             <p

@@ -22,13 +22,25 @@ function AuthPage({ isLoginPage }) {
         <form className="auth-page__form">
           {!isLoginPage && (
             <>
-              <FormInput type={'text'} labelName={'Имя'} />
+              <FormInput
+                type={'text'}
+                labelName={'Имя'}
+                placeholder={'Введите имя'}
+              />
               <InputError />
             </>
           )}
-          <FormInput type={'email'} labelName={'E-mail'} />
+          <FormInput
+            type={'email'}
+            labelName={'E-mail'}
+            placeholder={'Введите E-mail'}
+          />
           <InputError />
-          <FormInput type={'password'} labelName={'Пароль'} />
+          <FormInput
+            type={'password'}
+            labelName={'Пароль'}
+            placeholder={'Введите пароль'}
+          />
           <InputError>{isLoginPage ? '' : 'Что-то пошло не так...'}</InputError>
           <button
             className={`auth-page__submit-button ${
