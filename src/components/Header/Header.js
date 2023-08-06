@@ -1,17 +1,17 @@
 import logoPath from '../../images/circle-logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Header({ children, isLoggedIn }) {
-  const navigate = useNavigate();
   return (
     <header className={`header ${isLoggedIn ? '' : 'header_theme_pink'}`}>
       <div className="header__container">
-        <img
-          onClick={() => navigate('/')}
-          src={logoPath}
-          alt="Логотип дипломного проекта"
-          className="header__logo header__button"
-        />
+        <Link to="/" className="header__link">
+          <img
+            src={logoPath}
+            alt="Логотип дипломного проекта"
+            className="header__logo header__button"
+          />
+        </Link>
         {children}
       </div>
     </header>

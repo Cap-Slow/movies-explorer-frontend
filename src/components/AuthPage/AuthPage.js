@@ -1,7 +1,7 @@
 import logoPath from '../../images/circle-logo.svg';
 import FormInput from '../FormInput/FormInput';
 import InputError from '../InputError/InputError';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function AuthPage({ isLoginPage }) {
   const navigate = useNavigate();
@@ -9,7 +9,14 @@ function AuthPage({ isLoginPage }) {
   return (
     <section className="auth-page">
       <div className="auth-page__container">
-        <img className="auth-page__logo" src={logoPath} alt="Логотип проекта" />
+        <Link to="/" className="auth-page__link">
+          <img
+            src={logoPath}
+            alt="Логотип дипломного проекта"
+            className="auth-page__logo"
+          />
+        </Link>
+        {/* <img className="auth-page__logo" src={logoPath} alt="Логотип проекта" /> */}
         <h2 className="auth-page__title">
           {isLoginPage ? 'Рады видеть!' : 'Добро пожаловать!'}
         </h2>
