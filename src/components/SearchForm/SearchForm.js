@@ -21,7 +21,7 @@ function SearchForm() {
             Найти
           </button>
         </div>
-        <div className="search__form-divider"></div>
+        <div className="search-form__divider"></div>
         <FilterCheckbox></FilterCheckbox>
       </form>
     </section>
