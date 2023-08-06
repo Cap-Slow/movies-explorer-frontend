@@ -33,6 +33,12 @@
   font-size: 0;
 }
 
+.auth-page__link:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+
 .auth-page__logo {
   margin: 70px 0 40px;
 }

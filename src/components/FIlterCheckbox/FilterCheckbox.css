@@ -26,6 +26,10 @@
   height: 20px;
 }
 
+.filter-checkbox__visible-element:hover {
+  cursor: pointer;
+}
+
 .filter-checkbox__label-text {
   font-size: 13px;
   font-weight: 400;
