@@ -29,8 +29,12 @@
   transition: opacity 0.5s ease;
 }
 
+.auth-page__link {
+  font-size: 0;
+}
+
 .auth-page__logo {
-  margin: 70px 0 36px;
+  margin: 70px 0 40px;
 }
 
 .auth-page__title {
@@ -41,6 +45,7 @@
 
 .auth-page__form {
   width: 100%;
+  margin-bottom: 70px;
 }
 
 .auth-page__text {
@@ -73,7 +78,11 @@
 
 @media screen and (max-width: 1200px) {
   .auth-page__logo {
-    margin: 232px 0 36px;
+    margin: 232px 0 40px;
+  }
+
+  .auth-page__form {
+    margin-bottom: 232px;
   }
 }
 
@@ -93,7 +102,7 @@
   }
 
   .auth-page__logo {
-    margin: 56px 0 47px;
+    margin: 56px 0 51px;
   }
 
   .auth-page__title {
@@ -102,6 +111,7 @@
 
   .auth-page__form {
     width: 81%;
+    margin-bottom: 30px;
   }
 
   .auth-page__text {
