@@ -36,7 +36,6 @@ function SliderMenu({ isOpen, onClose }) {
           onClick={() => {
             navigate('/profile');
           }}
-          button
           className="slider-menu__text-button slider-menu__link_text_small"
         >
           Аккаунт
