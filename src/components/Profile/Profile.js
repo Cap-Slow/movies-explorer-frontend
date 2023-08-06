@@ -29,75 +29,79 @@ function Profile() {
   }
 
   return (
-    <section className="profile">
+    <>
       <Header isLoggedIn={true}>
         <Navigation />
       </Header>
-      <div className="profile__container">
-        <h2 className="profile__title">Привет, Дмитрий!</h2>
-        <form className="profile__form-container">
-          <div className="profile__row-container">
-            <p className="profile__info-label">Имя</p>
-            <input
-              className="profile__input"
-              type="text"
-              required
-              value={name}
-              disabled={!isEditableForm}
-              onChange={handleNameChange}
-              minLength="2"
-            />
-          </div>
-          <div className="profile__row-container">
-            <label className="profile__info-label">E-mail</label>
-            <input
-              className="profile__input"
-              type="email"
-              required
-              value={email}
-              disabled={!isEditableForm}
-              onChange={handleEmailChange}
-            />
-          </div>
-          <p
-            className={`profile__error-message ${
-              isProfileUpdateError ? 'profile__error-message_type_visible' : ''
-            }  `}
-          >
-            При обновлении профиля произошла ошибка.
-          </p>
-          {!isEditableForm && (
-            <button
-              type="button"
-              className="profile__button "
-              onClick={editForm}
+      <section className="profile">
+        <div className="profile__container">
+          <h2 className="profile__title">Привет, Дмитрий!</h2>
+          <form className="profile__form-container">
+            <div className="profile__row-container">
+              <p className="profile__info-label">Имя</p>
+              <input
+                className="profile__input"
+                type="text"
+                required
+                value={name}
+                disabled={!isEditableForm}
+                onChange={handleNameChange}
+                minLength="2"
+              />
+            </div>
+            <div className="profile__row-container">
+              <label className="profile__info-label">E-mail</label>
+              <input
+                className="profile__input"
+                type="email"
+                required
+                value={email}
+                disabled={!isEditableForm}
+                onChange={handleEmailChange}
+              />
+            </div>
+            <p
+              className={`profile__error-message ${
+                isProfileUpdateError
+                  ? 'profile__error-message_type_visible'
+                  : ''
+              }  `}
             >
-              Редактировать
-            </button>
-          )}
-          {!isEditableForm && (
-            <button
-              type="button"
-              onClick={() => {
-                navigate('/signin');
-              }}
-              className="profile__button profile__button_color_red"
-            >
-              Выйти из аккаунта
-            </button>
-          )}
-          {isEditableForm && (
-            <button
-              type="submit"
-              className="profile__save-button"
-              onClick={handleSubmit}
-            >
-              Сохранить
-            </button>
-          )}
-        </form>
-      </div>
-    </section>
+              При обновлении профиля произошла ошибка.
+            </p>
+            {!isEditableForm && (
+              <button
+                type="button"
+                className="profile__button "
+                onClick={editForm}
+              >
+                Редактировать
+              </button>
+            )}
+            {!isEditableForm && (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate('/signin');
+                }}
+                className="profile__button profile__button_color_red"
+              >
+                Выйти из аккаунта
+              </button>
+            )}
+            {isEditableForm && (
+              <button
+                type="submit"
+                className="profile__save-button"
+                onClick={handleSubmit}
+              >
+                Сохранить
+              </button>
+            )}
+          </form>
+        </div>
+      </section>
+    </>
   );
 }
 

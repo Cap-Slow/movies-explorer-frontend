@@ -11,37 +11,39 @@ import thirdImagePath from '../../images/movie-placeholders/third-image.png';
 
 function SavedMovies({ isMenuOpen, closeMenu, onMenuOpen }) {
   return (
-    <section className="saved-movies">
+    <>
       <Header isLoggedIn={true}>
         <Navigation onMenuOpen={onMenuOpen} />
         <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
       </Header>
-      <SearchForm />
-      <MoviesCardList isMoviesPage={false}>
-        <MoviesCard
-          title={'33 слова о дизайне'}
-          duration={'1ч 17м'}
-          imageLink={firstImagePath}
-        >
-          <button className="movies-card__delete-icon movies-card__save-element"></button>
-        </MoviesCard>
-        <MoviesCard
-          title={'Киноальманах «100 лет дизайна»'}
-          duration={'1ч 17м'}
-          imageLink={secondImagePath}
-        >
-          <button className="movies-card__delete-icon movies-card__save-element"></button>
-        </MoviesCard>
-        <MoviesCard
-          title={'В погоне за Бенкси'}
-          duration={'1ч 17м'}
-          imageLink={thirdImagePath}
-        >
-          <button className="movies-card__delete-icon movies-card__save-element"></button>
-        </MoviesCard>
-      </MoviesCardList>
+      <section className="saved-movies">
+        <SearchForm />
+        <MoviesCardList isMoviesPage={false}>
+          <MoviesCard
+            title={'33 слова о дизайне'}
+            duration={'1ч 17м'}
+            imageLink={firstImagePath}
+          >
+            <button className="movies-card__delete-icon movies-card__save-element"></button>
+          </MoviesCard>
+          <MoviesCard
+            title={'Киноальманах «100 лет дизайна»'}
+            duration={'1ч 17м'}
+            imageLink={secondImagePath}
+          >
+            <button className="movies-card__delete-icon movies-card__save-element"></button>
+          </MoviesCard>
+          <MoviesCard
+            title={'В погоне за Бенкси'}
+            duration={'1ч 17м'}
+            imageLink={thirdImagePath}
+          >
+            <button className="movies-card__delete-icon movies-card__save-element"></button>
+          </MoviesCard>
+        </MoviesCardList>
+      </section>
       <Footer />
-    </section>
+    </>
   );
 }
 

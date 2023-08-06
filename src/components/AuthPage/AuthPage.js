@@ -16,7 +16,6 @@ function AuthPage({ isLoginPage }) {
             className="auth-page__logo"
           />
         </Link>
-        {/* <img className="auth-page__logo" src={logoPath} alt="Логотип проекта" /> */}
         <h2 className="auth-page__title">
           {isLoginPage ? 'Рады видеть!' : 'Добро пожаловать!'}
         </h2>
