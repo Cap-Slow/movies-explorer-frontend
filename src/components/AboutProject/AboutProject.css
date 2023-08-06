@@ -58,12 +58,12 @@
   line-height: normal;
 }
 
-.timeline-text_theme_black {
+.about-project__timeline-text_theme_black {
   color: #fff;
   background-color: #000;
 }
 
-.timeline-text_theme_gray {
+.about-project__timeline-text_theme_gray {
   background-color: #f2f2f2;
 }
 

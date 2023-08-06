@@ -23,10 +23,10 @@ function AboutProject() {
         </div>
       </div>
       <div className="about-project__timeline">
-        <p className="about-project__timeline-text timeline-text_theme_black">
+        <p className="about-project__timeline-text about-project__timeline-text_theme_black">
           1 неделя
         </p>
-        <p className="about-project__timeline-text timeline-text_theme_gray">
+        <p className="about-project__timeline-text about-project__timeline-text_theme_gray">
           4 недели
         </p>
         <p className="about-project__timeline-text about-project__timeline-text_type_gray">
