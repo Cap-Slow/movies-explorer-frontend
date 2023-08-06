@@ -1,9 +1,10 @@
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
+import SliderMenu from '../SliderMenu/SliderMenu';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Profile() {
+function Profile({ onMenuOpen, isMenuOpen, closeMenu }) {
   const [isEditableForm, setIsEditableForm] = useState(false);
   const [name, setName] = useState('Дмитрий');
   const [email, setEmail] = useState('pochta@yandex.ru');
@@ -31,7 +32,8 @@ function Profile() {
   return (
     <>
       <Header isLoggedIn={true}>
-        <Navigation />
+        <Navigation onMenuOpen={onMenuOpen} />
+        <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
       </Header>
       <section className="profile">
         <div className="profile__container">

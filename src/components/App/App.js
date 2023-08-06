@@ -60,7 +60,11 @@ function App() {
         path="/profile"
         element={
           <div className="page">
-            <Profile></Profile>
+            <Profile
+              onMenuOpen={handleMenuOpen}
+              isMenuOpen={isMenuOpen}
+              closeMenu={closeMenu}
+            ></Profile>
           </div>
         }
       />
