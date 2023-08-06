@@ -1,5 +1,4 @@
 import photoPath from '../../images/me.jpg';
-import arrowPath from '../../images/arrow.svg';
 
 function AboutMe() {
   return (
