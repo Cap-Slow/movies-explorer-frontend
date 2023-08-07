@@ -1,0 +1,116 @@
+.movies-card {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  position: relative;
+}
+
+.movies-card__image {
+  width: 100%;
+  min-height: 201px;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+
+.movies-card__description {
+  display: flex;
+  width: 92%;
+  align-self: center;
+  justify-content: space-between;
+}
+
+.movies-card__title {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+  padding-top: 1px;
+  max-width: 250px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.movies-card__duration-container {
+  width: 52px;
+  height: 18px;
+  border-radius: 3px;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+}
+
+.movies-card__duration-text {
+  color: #a0a0a0;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 10px;
+  margin: 0 auto;
+}
+
+.movies-card__save-element {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: none;
+  background: none;
+}
+
+.movies-card__save-button {
+  width: 72px;
+  height: 21px;
+  border-radius: 30px;
+  background: #f9f9f9;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 9px;
+}
+
+.movies-card__saved-icon {
+  width: 21px;
+  height: 21px;
+  background-image: url('../../images/saved-icon.svg');
+  background-repeat: no-repeat;
+}
+
+.movies-card__delete-icon {
+  width: 21px;
+  height: 21px;
+  background-image: url('../../images/remove-saved-button.svg');
+  background-repeat: no-repeat;
+}
+
+.movies-card__save-element:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+
+@media screen and (max-width: 1200px) {
+  .movies-card__image {
+    min-height: 190px;
+    margin-bottom: 25px;
+  }
+
+  .movies-card__description {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .movies-card__image {
+    min-height: 168px;
+    width: 300px;
+    margin-bottom: 16px;
+  }
+
+  .movies-card__title {
+    font-size: 12px;
+  }
+
+  .movies-card__save-element {
+    top: 10px;
+    right: 10px;
+  }
+}

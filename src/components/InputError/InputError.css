@@ -1,0 +1,9 @@
+.input-error-message {
+  display: block;
+  padding-top: 10px;
+  width: 100%;
+  min-height: 10px;
+  color: #ff4062;
+  font-size: 10px;
+  font-weight: 400;
+}

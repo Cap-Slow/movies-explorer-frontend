@@ -1,0 +1,123 @@
+.portfolio {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.portfolio__title {
+  color: #a0a0a0;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0 0 50px 0;
+}
+
+.portfolio__links {
+  padding-bottom: 105px;
+  padding-left: 0;
+  margin: 0;
+}
+
+.portfolio__link-container {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  padding-bottom: 20px;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+}
+
+.portfolio__link-container:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  transition: text-shadow 0.5s ease;
+}
+
+.portfolio__link-container:nth-of-type(2) {
+  padding: 19px 0 19px;
+  margin-bottom: 20px;
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.portfolio__link-text {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 50px;
+  letter-spacing: -1.2px;
+}
+
+.portfolio__link-button {
+  background-image: url(../../images/arrow.svg);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-position: center;
+  border: none;
+  width: 18px;
+  height: 17px;
+  margin: 6px 6px 0 0;
+  padding: 0;
+}
+
+.portfolio__link-button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+
+@media screen and (max-width: 1200px) {
+  .portfolio {
+    max-width: 668px;
+  }
+
+  .portfolio__link-button {
+    margin: 5px 5px 0 0;
+  }
+
+  .portfolio__link-text {
+    font-size: 28px;
+    letter-spacing: -1.12px;
+  }
+
+  .portfolio__title {
+    margin: 0 0 49px 0;
+  }
+
+  .portfolio__links {
+    padding-bottom: 70px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .portfolio {
+    max-width: 292px;
+  }
+
+  .portfolio__title {
+    font-size: 14px;
+    margin: 0 0 40px 0;
+  }
+
+  .portfolio__link-container {
+    height: 27px;
+    align-items: flex-start;
+  }
+
+  .portfolio__link-container:nth-of-type(2) {
+    padding: 21px 0 19px;
+  }
+
+  .portfolio__link-text {
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.72px;
+  }
+
+  .portfolio__link-button {
+    background-image: url(../../images/arrow-small.svg);
+    margin: 4px 1px 0 0;
+  }
+}
