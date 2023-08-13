@@ -10,7 +10,7 @@
 .auth-page__submit-button {
   width: 100%;
   height: 45px;
-  margin: 67px 0 18px;
+  margin: 48px 0 18px;
   border: none;
   border-radius: 3px;
   background-color: #000;
@@ -19,8 +19,20 @@
   font-weight: 500;
 }
 
+.auth-page__register-error {
+  margin: 0;
+  display: block;
+  padding-top: 10px;
+  width: 100%;
+  min-height: 10px;
+  color: #ff4062;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+}
+
 .auth-page__submit-button_margin_high {
-  margin: 157px 0 18px;
+  margin: 131px 0 18px;
 }
 
 .auth-page__submit-button:hover {
@@ -82,6 +94,15 @@
   transition: text-shadow 0.5s ease;
 }
 
+.auth-page__submit-button_disabled {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.auth-page__submit-button_disabled:hover {
+  cursor: default;
+  opacity: 1;
+}
+
 @media screen and (max-width: 1200px) {
   .auth-page__logo {
     margin: 232px 0 40px;
@@ -94,12 +115,12 @@
 
 @media screen and (max-width: 767px) {
   .auth-page__submit-button {
-    margin: 158px 0 14px;
+    margin: 138px 0 16px;
     font-size: 12px;
   }
 
   .auth-page__submit-button_margin_high {
-    margin: 247px 0 15px;
+    margin: 221px 0 15px;
   }
 
   .auth-page__container {
@@ -125,6 +146,10 @@
   }
 
   .auth-page__redirect-button {
+    font-size: 12px;
+  }
+
+  .auth-page__register-error {
     font-size: 12px;
   }
 }

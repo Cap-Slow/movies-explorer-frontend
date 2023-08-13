@@ -65,13 +65,4 @@
     grid-template-columns: 1fr;
     gap: 36px 0;
   }
-
-  .movies-card-list__load-button {
-    width: 240px;
-  }
-
-  .movies-card-list__load-button_display_hidden {
-    visibility: hidden;
-    margin: 35px auto 51px;
-  }
 }

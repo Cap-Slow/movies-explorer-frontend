@@ -11,19 +11,16 @@
   clip: rect(0 0 0 0);
 }
 
-.filter-checkbox__toggler:checked+.filter-checkbox__visible-element {
-  background-image: url(../../images/switch-on.svg);
-}
-
-.filter-checkbox__toggler+.filter-checkbox__visible-element {
-  background-image: url(../../images/switch-off.svg);
-}
-
 .filter-checkbox__visible-element {
   display: inline-block;
   vertical-align: middle;
   width: 36px;
   height: 20px;
+  background-image: url(../../images/switch-off.svg);
+}
+
+.filter-checkbox__visible-element_checked {
+  background-image: url(../../images/switch-on.svg)
 }
 
 .filter-checkbox__visible-element:hover {

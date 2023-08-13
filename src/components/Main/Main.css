@@ -2,6 +2,10 @@
   margin: 0 auto;
 }
 
+.main__header {
+  background-color: #f3c1f8;
+}
+
 .main__section-title {
   max-width: 1140px;
   padding: 110px 0 23px 0;

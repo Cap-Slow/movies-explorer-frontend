@@ -48,6 +48,28 @@
   padding: 0;
 }
 
+.profile__update-message {
+  display: block;
+  width: 100%;
+  min-height: 10px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  margin: 191px auto 20px;
+}
+
+.profile__update-message_type_error {
+  color: #ff4062;
+}
+
+.profile__error-message {
+  color: #ff4062;
+  font-size: 11px;
+  font-weight: 400;
+  text-align: center;
+}
+
 .profile__input:focus {
   transition: all 0.3s ease-in-out;
   outline: none;
@@ -80,27 +102,23 @@
   font-weight: 500;
 }
 
+.profile__save-button_type_disabled {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
 .profile__save-button:hover {
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 0.5s ease;
 }
 
+.profile__save-button_type_disabled:hover {
+  cursor: default;
+  opacity: 1;
+}
+
 .profile__button_color_red {
   color: #ff4062;
-}
-
-.profile__error-message {
-  visibility: hidden;
-  color: #ff4062;
-  font-size: 11px;
-  font-weight: 400;
-  margin: 172px auto 20px;
-  text-align: center;
-}
-
-.profile__error-message_type_visible {
-  visibility: visible;
 }
 
 .profile__button:hover {
@@ -120,16 +138,16 @@
     margin: 0;
   }
 
-  .profile__error-message {
-    margin: 162px auto 20px;
-  }
-
   .profile__row-container {
     min-width: 410px;
   }
 
   .profile__form-container {
     margin: 81px 0 161px;
+  }
+
+  .profile__update-message {
+    margin: 164px auto 20px;
   }
 }
 
@@ -150,7 +168,7 @@
     font-size: 12px;
   }
 
-  .profile__error-message {
-    margin: 331px auto 20px;
+  .profile__update-message {
+    margin: 333px auto 20px;
   }
 }

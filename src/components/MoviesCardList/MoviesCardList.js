@@ -1,14 +1,24 @@
-function MoviesCardList({ children, isMoviesPage }) {
+import MoviesCard from '../MoviesCard/MoviesCard';
+
+function MoviesCardList({
+  movies,
+  onSaveMovie,
+  onDeleteMovie,
+  isSavedMoviesPage,
+}) {
   return (
     <section className="movies-card-list">
-      <ul className="movies-card-list__list">{children}</ul>
-      <button
-        className={`movies-card-list__load-button ${
-          isMoviesPage ? '' : 'movies-card-list__load-button_display_hidden'
-        }`}
-      >
-        Ещё
-      </button>
+      <ul className="movies-card-list__list">
+        {movies.map((movie) => (
+          <MoviesCard
+            movie={movie}
+            key={movie.id || movie._id}
+            onSaveMovie={onSaveMovie}
+            onDeleteMovie={onDeleteMovie}
+            isSavedMoviesPage={isSavedMoviesPage}
+          ></MoviesCard>
+        ))}
+      </ul>
     </section>
   );
 }
