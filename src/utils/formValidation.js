@@ -1,4 +1,4 @@
-import { namePattern } from '../utils/constants';
+import { NAME_REGEX } from '../utils/constants';
 
 const emailValidator = require('email-validator');
 const handleInputChange = (e, values, errors, setValues, setErrors) => {
@@ -22,7 +22,7 @@ function setErrorText(input) {
   if (input.name === 'email' && !emailValidator.validate(input.value)) {
     return 'Некорректный email';
   }
-  if (input.type === 'text' && !namePattern.test(input.value)) {
+  if (input.type === 'text' && !NAME_REGEX.test(input.value)) {
     return 'Допустимы только латиница, кириллица, дефис и пробел';
   }
   return '';

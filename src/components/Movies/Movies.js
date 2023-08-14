@@ -7,7 +7,6 @@ import { useState } from 'react';
 function Movies({
   inputValue,
   onInputChange,
-  isMobile,
   isError,
   filteredMovies,
   isFormSubmitted,
@@ -17,7 +16,6 @@ function Movies({
   onCheckboxClick,
   displayedMovies,
   loadMoreMovies,
-  isMoreMovies,
   onSaveMovie,
   onDeleteMovie,
 }) {
@@ -54,24 +52,17 @@ function Movies({
             или сервер недоступен. Подождите немного и попробуйте ещё раз.
           </p>
         )}
-        {filteredMovies.length === 0 && isFormSubmitted && (
+        {filteredMovies.length === 0 && isFormSubmitted && !isLoading && (
           <p className="movies__not-found-element">Ничего не найдено.</p>
         )}
-        {filteredMovies.length > 0 && isMobile && (
+        {filteredMovies.length > 0 && (
           <MoviesCardList
             movies={displayedMovies}
             onSaveMovie={onSaveMovie}
             onDeleteMovie={onDeleteMovie}
           ></MoviesCardList>
         )}
-        {filteredMovies.length > 0 && !isMobile && (
-          <MoviesCardList
-            movies={displayedMovies}
-            onSaveMovie={onSaveMovie}
-            onDeleteMovie={onDeleteMovie}
-          ></MoviesCardList>
-        )}
-        {displayedMovies.length < filteredMovies.length && isMoreMovies && (
+        {displayedMovies.length < filteredMovies.length && (
           <button className="movies__load-button" onClick={loadMoreMovies}>
             Ещё
           </button>

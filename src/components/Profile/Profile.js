@@ -52,7 +52,7 @@ function Profile({
 
   return (
     <>
-      <Header isLoggedIn={true}>
+      <Header>
         <Navigation onMenuOpen={onMenuOpen} />
         <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
       </Header>

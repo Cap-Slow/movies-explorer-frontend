@@ -18,7 +18,6 @@ import { useNavigate } from 'react-router-dom';
 import mainApi from '../../utils/MainApi';
 
 function App() {
-  const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
@@ -43,54 +42,73 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isShortMovies) {
-      setFilteredMovies(filterShortMovies(filteredMovies));
-      setDisplayedMovies(filterShortMovies(filteredMovies).slice(0, 12));
-    } else {
-      const searchedMovies = movies.filter(
-        (movie) =>
-          movie.nameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-          movie.nameEN.toLowerCase().includes(inputValue.toLowerCase())
-      );
-      setFilteredMovies(searchedMovies);
-      setDisplayedMovies(searchedMovies.slice(0, 12));
-    }
-  }, [isShortMovies]);
+    mainApi
+      .getUserData()
+      .then((userData) => {
+        if (userData) {
+          setIsLoggedIn(true);
+          const { email, name, _id } = userData;
+          setCurrentUser({ email, name, _id });
+          navigate('/movies');
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
-    if (isSavedShortMovies) {
-      setSavedMovies(filterShortMovies(savedMovies));
-    } else {
-      mainApi.getSavedMovies().then((res) => {
-        setSavedMovies(res);
-      });
+    getDataFromLocalStorage();
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      mainApi
+        .getSavedMovies()
+        .then((res) => {
+          setSavedMovies(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (isSavedShortMovies) {
+        setSavedMovies(filterShortMovies(savedMovies));
+      } else {
+        mainApi
+          .getSavedMovies()
+          .then((res) => {
+            setSavedMovies(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   }, [isSavedShortMovies]);
 
   useEffect(() => {
-    getDataFromLocalStorage();
-  }, []);
+    if (isShortMovies) {
+      const shortMovies = filterShortMovies(filteredMovies);
+      setFilteredMovies(shortMovies);
+      setDisplayedMovies(shortMovies.slice(0, 12));
+    } else {
+      const storagedMovies = JSON.parse(localStorage.getItem('movies'));
+      setFilteredMovies(storagedMovies ? storagedMovies : []);
+      setDisplayedMovies(storagedMovies ? storagedMovies.slice(0, 12) : []);
+    }
+  }, [isShortMovies]);
 
   useEffect(() => {
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   }, [filteredMovies]);
-
-  useEffect(() => {
-    if (isMobile) {
-      setDisplayedMovies(filteredMovies.slice(0, 5));
-    } else {
-      setDisplayedMovies(filteredMovies.slice(0, 12));
-    }
-  }, [isFormSubmitted]);
-
-  useEffect(() => {
-    if (displayedMovies.length < filteredMovies.length) {
-      setIsMoreMovies(true);
-    } else {
-      setIsMoreMovies(false);
-    }
-  }, [displayedMovies, filteredMovies]);
 
   useEffect(() => {
     if (isMobile) {
@@ -100,36 +118,17 @@ function App() {
     }
   }, [isMobile]);
 
-  useEffect(() => {
-    Promise.all([mainApi.getUserData(), mainApi.getSavedMovies()])
-      .then(([userData, savedMovies]) => {
-        if (userData) {
-          const { email, name } = userData;
-          setCurrentUser({ email, name, _id: userData._id });
-          setIsLoggedIn(true);
-          navigate('/movies');
-        } else {
-          setIsLoggedIn(false);
-        }
-        setSavedMovies(savedMovies);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
   function loadMoreMovies() {
-    if (isMobile) {
-      setMoviesToLoad(2);
-      setDisplayedMovies(filteredMovies.slice(0, displayedMovies.length + 2));
+    if (isShortMovies) {
+      const shortMovies = filterShortMovies(filteredMovies);
+      setFilteredMovies(shortMovies);
+      setDisplayedMovies(
+        shortMovies.slice(0, displayedMovies.length + moviesToLoad)
+      );
     } else {
-      setMoviesToLoad(moviesToLoad + 3);
-      setDisplayedMovies(filteredMovies.slice(0, displayedMovies.length + 3));
-    }
-    if (displayedMovies.length < filteredMovies.length) {
-      setIsMoreMovies(true);
-    } else {
-      setIsMoreMovies(false);
+      setDisplayedMovies(
+        filteredMovies.slice(0, displayedMovies.length + moviesToLoad)
+      );
     }
   }
 
@@ -172,12 +171,20 @@ function App() {
     const isCheckboxActive = JSON.parse(localStorage.getItem('isShortMovies'));
     if (savedInputValue) {
       setinputValue(savedInputValue);
+    } else {
+      setinputValue('');
     }
     if (storagedMovies) {
       setFilteredMovies(storagedMovies);
+      setDisplayedMovies(storagedMovies.slice(0, 12));
+    } else {
+      setFilteredMovies([]);
+      setDisplayedMovies([]);
     }
     if (isCheckboxActive) {
       setIsShortMovies(isCheckboxActive);
+    } else {
+      setIsShortMovies(false);
     }
   }
 
@@ -189,8 +196,7 @@ function App() {
       .getMovies()
       .then((res) => {
         const allMovies = res;
-        setMovies(allMovies);
-        const searchedMovies = allMovies.filter(
+        let searchedMovies = allMovies.filter(
           (movie) =>
             movie.nameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
             movie.nameEN.toLowerCase().includes(inputValue.toLowerCase())
@@ -199,12 +205,25 @@ function App() {
         searchedMovies.forEach((movie) => {
           if (savedMoviesIds.includes(movie.id)) {
             movie.owner = currentUser._id;
+            movie._id = savedMovies.find(
+              (savedMovie) => savedMovie.movieId === movie.id
+            )._id;
           }
         });
-        if (isShortMovies) {
-          setFilteredMovies(filterShortMovies(searchedMovies));
+        setFilteredMovies(searchedMovies);
+        if (isMobile) {
+          setDisplayedMovies(searchedMovies.slice(0, 5));
         } else {
-          setFilteredMovies(searchedMovies);
+          setDisplayedMovies(searchedMovies.slice(0, 12));
+        }
+        if (isShortMovies) {
+          const shortSearchedMovies = filterShortMovies(searchedMovies);
+          setFilteredMovies(shortSearchedMovies);
+          if (isMobile) {
+            setDisplayedMovies(shortSearchedMovies.slice(0, 5));
+          } else {
+            setDisplayedMovies(shortSearchedMovies.slice(0, 12));
+          }
         }
         saveDataInLocalStorage(inputValue, searchedMovies, isShortMovies);
       })
@@ -221,10 +240,15 @@ function App() {
     setIsSearchError(false);
     setIsLoading(true);
     if (inputValue === '') {
-      mainApi.getSavedMovies().then((res) => {
-        setSavedMovies(res);
-        setIsLoading(false);
-      });
+      mainApi
+        .getSavedMovies()
+        .then((res) => {
+          setSavedMovies(res);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       return;
     }
     const filteredSavedMovies = savedMovies.filter(
@@ -293,13 +317,15 @@ function App() {
   function onRegister(name, email, password) {
     mainApi
       .register(name, email, password)
-      .then(() => {
+      .then((res) => {
+        const { email, name, _id } = res;
         setIsLoggedIn(true);
-        setCurrentUser({ email, name });
+        setCurrentUser({ email, name, _id });
         setRegisterErrorMessage('');
         navigate('/movies');
       })
       .catch((err) => {
+        console.log(err);
         setRegisterErrorMessage(err);
       });
   }
@@ -308,9 +334,9 @@ function App() {
     mainApi
       .authorize(email, password)
       .then((res) => {
-        const { email, name } = res.userWithoutVersion;
+        const { email, name, _id } = res.userWithoutVersion;
         setIsLoggedIn(true);
-        setCurrentUser({ email, name });
+        setCurrentUser({ email, name, _id });
         setLoginErrorMessage('');
         navigate('/movies');
       })
@@ -323,6 +349,7 @@ function App() {
     localStorage.removeItem('inputValue');
     localStorage.removeItem('movies');
     localStorage.removeItem('isShortMovies');
+    setIsFormSubmitted(false);
     mainApi
       .signout()
       .then(() => {
@@ -361,6 +388,25 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
         <Route
+          path="/signup"
+          element={
+            <div className="page">
+              <Register
+                onRegister={onRegister}
+                errorMessage={registerErrorMessage}
+              ></Register>
+            </div>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <div className="page">
+              <Login onLogin={onLogin} errorMessage={loginErrorMessage}></Login>
+            </div>
+          }
+        />
+        <Route
           path="/"
           element={
             <div className="page">
@@ -385,10 +431,9 @@ function App() {
                     <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
                   </Header>
                   <Movies
-                    isLoggedIn={isLoggedIn}
                     inputValue={inputValue}
                     onInputChange={handleinputValueChange}
-                    isMobile={isMobile}
+                    isFormSubmitted={isFormSubmitted}
                     isError={isSearchError}
                     onMoviesSearch={handleMoviesSearch}
                     filteredMovies={filteredMovies}
@@ -397,9 +442,10 @@ function App() {
                     onCheckboxClick={handleCheckboxClick}
                     displayedMovies={displayedMovies}
                     loadMoreMovies={loadMoreMovies}
-                    isMoreMovies={isMoreMovies}
                     onSaveMovie={handleSaveMovie}
                     onDeleteMovie={handleDeleteMovie}
+                    setCurrentUser={setCurrentUser}
+                    setIsLoggedIn={setIsLoggedIn}
                   ></Movies>
                 </div>
               }
@@ -413,7 +459,7 @@ function App() {
               isLoggedIn={isLoggedIn}
               element={
                 <div className="page">
-                  <Header isLoggedIn={true}>
+                  <Header>
                     <Navigation onMenuOpen={handleMenuOpen} />
                     <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
                   </Header>
@@ -454,25 +500,6 @@ function App() {
                 </div>
               }
             />
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <div className="page">
-              <Register
-                onRegister={onRegister}
-                errorMessage={registerErrorMessage}
-              ></Register>
-            </div>
-          }
-        />
-        <Route
-          path="/signin"
-          element={
-            <div className="page">
-              <Login onLogin={onLogin} errorMessage={loginErrorMessage}></Login>
-            </div>
           }
         />
         <Route

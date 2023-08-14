@@ -22,7 +22,7 @@ function Main({ isLoggedIn, onMenuOpen, isMenuOpen, closeMenu }) {
           </Header>
         )}
         {!isLoggedIn && (
-          <Header isLoggedIn={false}>
+          <Header>
             <nav className="header__nav-container">
               <button
                 onClick={() => {
