@@ -43,6 +43,7 @@ function App() {
   const [isProfileFormOpen, setIsProfileFormOpen] = useState(false);
   const [profileUpdateMessage, setProfileUpdateMessage] = useState('');
   const [isSuccessProfileUpdate, setIsSuccessProfileUpdate] = useState(false);
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -343,6 +344,7 @@ function App() {
   }
 
   function onRegister(name, email, password) {
+    setIsInputDisabled(true);
     mainApi
       .register(name, email, password)
       .then((res) => {
@@ -357,10 +359,14 @@ function App() {
       .catch((err) => {
         console.log(err);
         setRegisterErrorMessage(err);
+      })
+      .finally(() => {
+        setIsInputDisabled(false);
       });
   }
 
   function onLogin(email, password) {
+    setIsInputDisabled(true);
     mainApi
       .authorize(email, password)
       .then((res) => {
@@ -373,6 +379,9 @@ function App() {
       })
       .catch((err) => {
         setLoginErrorMessage(err);
+      })
+      .finally(() => {
+        setIsInputDisabled(false);
       });
   }
 
@@ -512,6 +521,7 @@ function App() {
               <Register
                 onRegister={onRegister}
                 errorMessage={registerErrorMessage}
+                isInputDisabled={isInputDisabled}
               ></Register>
             </div>
           }
@@ -520,7 +530,11 @@ function App() {
           path="/signin"
           element={
             <div className="page">
-              <Login onLogin={onLogin} errorMessage={loginErrorMessage}></Login>
+              <Login
+                onLogin={onLogin}
+                errorMessage={loginErrorMessage}
+                isInputDisabled={isInputDisabled}
+              ></Login>
             </div>
           }
         />

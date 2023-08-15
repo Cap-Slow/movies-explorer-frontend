@@ -14,6 +14,7 @@ function AuthPage({
   loginErrorMessage,
   registerErrorMessage,
   onRegister,
+  isInputDisabled,
 }) {
   const navigate = useNavigate();
   const [values, setValues] = useState({});
@@ -71,6 +72,7 @@ function AuthPage({
                 onInputChange={handleAuthInputChange}
                 minlength={2}
                 maxlength={30}
+                isInputDisabled={isInputDisabled}
               />
               <InputError>{errors.name}</InputError>
             </>
@@ -81,6 +83,7 @@ function AuthPage({
             labelName={'E-mail'}
             placeholder={'Введите E-mail'}
             onInputChange={handleAuthInputChange}
+            isInputDisabled={isInputDisabled}
           />
           <InputError>{errors.email}</InputError>
           <FormInput
@@ -89,6 +92,7 @@ function AuthPage({
             labelName={'Пароль'}
             placeholder={'Введите пароль'}
             onInputChange={handleAuthInputChange}
+            isInputDisabled={isInputDisabled}
           />
           <InputError>{errors.password}</InputError>
           <p className="auth-page__register-error">

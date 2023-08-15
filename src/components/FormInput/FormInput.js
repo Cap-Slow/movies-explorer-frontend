@@ -6,6 +6,7 @@ function FormInput({
   inputName,
   minlength,
   maxlength,
+  isInputDisabled,
 }) {
   return (
     <>
@@ -17,6 +18,7 @@ function FormInput({
         placeholder={placeholder}
         name={inputName}
         onChange={onInputChange}
+        disabled={isInputDisabled}
         {...(minlength !== undefined ? { minLength: minlength } : {})}
         {...(maxlength !== undefined ? { maxLength: maxlength } : {})}
       />
