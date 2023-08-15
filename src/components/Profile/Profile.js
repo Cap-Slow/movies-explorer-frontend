@@ -18,6 +18,7 @@ function Profile({
   onProfileUpdate,
   isSuccessProfileUpdate,
   profileUpdateMessage,
+  isProfileFormSubmitted,
 }) {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -120,7 +121,7 @@ function Profile({
             {isProfileFormOpen && (
               <button
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || isProfileFormSubmitted}
                 className={`profile__save-button ${
                   !isValid ? 'profile__save-button_type_disabled' : ''
                 }`}

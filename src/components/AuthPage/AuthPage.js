@@ -101,8 +101,12 @@ function AuthPage({
           <button
             className={`auth-page__submit-button ${
               isLoginPage ? 'auth-page__submit-button_margin_high' : ''
-            } ${!isValid ? 'auth-page__submit-button_disabled' : ''}`}
-            disabled={!isValid}
+            } ${
+              !isValid || isInputDisabled
+                ? 'auth-page__submit-button_disabled'
+                : ''
+            }`}
+            disabled={!isValid || isInputDisabled}
             onClick={isLoginPage ? handleLogin : handleRegister}
             type="submit"
           >

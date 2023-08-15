@@ -41,6 +41,7 @@ function App() {
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [registerErrorMessage, setRegisterErrorMessage] = useState('');
   const [isProfileFormOpen, setIsProfileFormOpen] = useState(false);
+  const [isProfileFormSubmitted, setIsProfileFormSubmitted] = useState(false);
   const [profileUpdateMessage, setProfileUpdateMessage] = useState('');
   const [isSuccessProfileUpdate, setIsSuccessProfileUpdate] = useState(false);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
@@ -407,6 +408,7 @@ function App() {
   }
 
   function onProfileUpdate(name, email) {
+    setIsProfileFormSubmitted(true);
     mainApi
       .updateUserData(name, email)
       .then((res) => {
@@ -421,6 +423,7 @@ function App() {
       })
       .finally(() => {
         setIsProfileFormOpen(false);
+        setIsProfileFormSubmitted(false);
       });
   }
 
@@ -508,6 +511,7 @@ function App() {
                     onProfileUpdate={onProfileUpdate}
                     isSuccessProfileUpdate={isSuccessProfileUpdate}
                     profileUpdateMessage={profileUpdateMessage}
+                    isProfileFormSubmitted={isProfileFormSubmitted}
                   ></Profile>
                 </div>
               }
