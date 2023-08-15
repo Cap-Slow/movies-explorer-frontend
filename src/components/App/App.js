@@ -10,11 +10,12 @@ import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
 import SliderMenu from '../SliderMenu/SliderMenu';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import LoadingPage from '../LoadingPage/LoadingPage';
 import moviesApi from '../../utils/MoviesApi';
 import { Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import mainApi from '../../utils/MainApi';
 
 function App() {
@@ -34,13 +35,14 @@ function App() {
   const [isDesktop, setDesktop] = useState(window.innerWidth >= 768);
   const [inputValue, setinputValue] = useState('');
   const [savedMoviesInputValue, setSavedMoviesInputValue] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [registerErrorMessage, setRegisterErrorMessage] = useState('');
   const [isProfileFormOpen, setIsProfileFormOpen] = useState(false);
   const [profileUpdateMessage, setProfileUpdateMessage] = useState('');
   const [isSuccessProfileUpdate, setIsSuccessProfileUpdate] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     mainApi
@@ -48,9 +50,16 @@ function App() {
       .then((userData) => {
         if (userData) {
           setIsLoggedIn(true);
+          if (
+            location.pathname === '/signin' ||
+            location.pathname === '/signup'
+          ) {
+            navigate('/movies');
+          } else {
+            navigate(location.pathname);
+          }
           const { email, name, _id } = userData;
           setCurrentUser({ email, name, _id });
-          navigate('/movies');
         } else {
           setIsLoggedIn(false);
         }
@@ -391,41 +400,13 @@ function App() {
       });
   }
 
+  if (isLoggedIn === null) {
+    return <LoadingPage />;
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
-        <Route
-          path="/signup"
-          element={
-            <div className="page">
-              <Register
-                onRegister={onRegister}
-                errorMessage={registerErrorMessage}
-              ></Register>
-            </div>
-          }
-        />
-        <Route
-          path="/signin"
-          element={
-            <div className="page">
-              <Login onLogin={onLogin} errorMessage={loginErrorMessage}></Login>
-            </div>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <div className="page">
-              <Main
-                isLoggedIn={isLoggedIn}
-                onMenuOpen={handleMenuOpen}
-                isMenuOpen={isMenuOpen}
-                closeMenu={closeMenu}
-              ></Main>
-            </div>
-          }
-        />
         <Route
           path="/movies"
           element={
@@ -507,6 +488,38 @@ function App() {
                 </div>
               }
             />
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <div className="page">
+              <Register
+                onRegister={onRegister}
+                errorMessage={registerErrorMessage}
+              ></Register>
+            </div>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <div className="page">
+              <Login onLogin={onLogin} errorMessage={loginErrorMessage}></Login>
+            </div>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <div className="page">
+              <Main
+                isLoggedIn={isLoggedIn}
+                onMenuOpen={handleMenuOpen}
+                isMenuOpen={isMenuOpen}
+                closeMenu={closeMenu}
+              ></Main>
+            </div>
           }
         />
         <Route
