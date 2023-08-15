@@ -29,6 +29,7 @@ function App() {
   const [isSavedShortMovies, setIsSavedShortMovies] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isSearchError, setIsSearchError] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -36,7 +37,7 @@ function App() {
   const [isDesktop, setDesktop] = useState(window.innerWidth >= 768);
   const [inputValue, setinputValue] = useState('');
   const [savedMoviesInputValue, setSavedMoviesInputValue] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [registerErrorMessage, setRegisterErrorMessage] = useState('');
   const [isProfileFormOpen, setIsProfileFormOpen] = useState(false);
@@ -46,6 +47,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
+    setIsLoadingPage(true);
     mainApi
       .getUserData()
       .then((userData) => {
@@ -67,6 +69,9 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoadingPage(false);
       });
   }, []);
 
@@ -345,6 +350,8 @@ function App() {
         setIsLoggedIn(true);
         setCurrentUser({ email, name, _id });
         setRegisterErrorMessage('');
+        setLoginErrorMessage('');
+
         navigate('/movies');
       })
       .catch((err) => {
@@ -361,6 +368,7 @@ function App() {
         setIsLoggedIn(true);
         setCurrentUser({ email, name, _id });
         setLoginErrorMessage('');
+        setRegisterErrorMessage('');
         navigate('/movies');
       })
       .catch((err) => {
@@ -407,7 +415,7 @@ function App() {
       });
   }
 
-  if (isLoggedIn === null) {
+  if (isLoadingPage) {
     return <LoadingPage />;
   }
 
