@@ -19,6 +19,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import mainApi from '../../utils/MainApi';
 
 function App() {
+  const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
@@ -212,44 +213,50 @@ function App() {
     }
   }
 
-  function handleMoviesSearch(inputValue) {
+  function handleMoviesResultsFiltration(movies) {
+    let searchedMovies = movies.filter(
+      (movie) =>
+        movie.nameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
+        movie.nameEN.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    const savedMoviesIds = savedMovies.map((movie) => movie.movieId);
+    searchedMovies.forEach((movie) => {
+      if (savedMoviesIds.includes(movie.id)) {
+        movie.owner = currentUser._id;
+        movie._id = savedMovies.find(
+          (savedMovie) => savedMovie.movieId === movie.id
+        )._id;
+      }
+    });
+    setFilteredMovies(searchedMovies);
+    setDisplayedMovies(searchedMovies.slice(0, moviesToShow));
+    if (isShortMovies) {
+      const shortSearchedMovies = filterShortMovies(searchedMovies);
+      setFilteredMovies(shortSearchedMovies);
+      setDisplayedMovies(shortSearchedMovies.slice(0, moviesToShow));
+    }
+    saveDataInLocalStorage(inputValue, searchedMovies, isShortMovies);
+  }
+
+  function handleMoviesSearch() {
     setIsSearchError(false);
     setIsFormSubmitted(true);
     setIsLoading(true);
-    moviesApi
-      .getMovies()
-      .then((res) => {
-        const allMovies = res;
-        let searchedMovies = allMovies.filter(
-          (movie) =>
-            movie.nameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
-            movie.nameEN.toLowerCase().includes(inputValue.toLowerCase())
-        );
-        const savedMoviesIds = savedMovies.map((movie) => movie.movieId);
-        searchedMovies.forEach((movie) => {
-          if (savedMoviesIds.includes(movie.id)) {
-            movie.owner = currentUser._id;
-            movie._id = savedMovies.find(
-              (savedMovie) => savedMovie.movieId === movie.id
-            )._id;
-          }
+    if (movies.length === 0) {
+      moviesApi
+        .getMovies()
+        .then((res) => {
+          setMovies(res);
+          handleMoviesResultsFiltration(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsSearchError(true);
         });
-        setFilteredMovies(searchedMovies);
-        setDisplayedMovies(searchedMovies.slice(0, moviesToShow));
-        if (isShortMovies) {
-          const shortSearchedMovies = filterShortMovies(searchedMovies);
-          setFilteredMovies(shortSearchedMovies);
-          setDisplayedMovies(shortSearchedMovies.slice(0, moviesToShow));
-        }
-        saveDataInLocalStorage(inputValue, searchedMovies, isShortMovies);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsSearchError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    } else {
+      handleMoviesResultsFiltration(movies);
+    }
+    setIsLoading(false);
   }
 
   function handleSavedMoviesSearch(inputValue) {
@@ -280,7 +287,7 @@ function App() {
     mainApi
       .saveMovie(movie)
       .then((savedMovie) => {
-        setFilteredMovies((state) =>
+        setMovies((state) =>
           state.map((m) =>
             m.id === savedMovie.movieId
               ? { ...m, owner: currentUser._id, _id: savedMovie._id }
@@ -306,7 +313,7 @@ function App() {
       .deleteMovie(movie._id)
       .then(() => {
         setSavedMovies((state) => state.filter((m) => m._id !== movie._id));
-        setFilteredMovies((state) =>
+        setMovies((state) =>
           state.map((m) =>
             m.nameRU === movie.nameRU ? { ...m, owner: null } : m
           )
