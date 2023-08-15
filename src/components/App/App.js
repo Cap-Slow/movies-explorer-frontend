@@ -21,8 +21,8 @@ function App() {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
-  const [isMoreMovies, setIsMoreMovies] = useState(false);
   const [moviesToLoad, setMoviesToLoad] = useState(0);
+  const [moviesToShow, setMoviesToShow] = useState(0);
   const [isShortMovies, setIsShortMovies] = useState(false);
   const [isSavedShortMovies, setIsSavedShortMovies] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,7 +30,8 @@ function App() {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isSearchError, setIsSearchError] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isMobile, setMobile] = useState(window.innerWidth < 767);
+  const [isTablet, setTablet] = useState(window.innerWidth < 1200);
+  const [isDesktop, setDesktop] = useState(window.innerWidth >= 768);
   const [inputValue, setinputValue] = useState('');
   const [savedMoviesInputValue, setSavedMoviesInputValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -97,11 +98,13 @@ function App() {
     if (isShortMovies) {
       const shortMovies = filterShortMovies(filteredMovies);
       setFilteredMovies(shortMovies);
-      setDisplayedMovies(shortMovies.slice(0, 12));
+      setDisplayedMovies(shortMovies.slice(0, moviesToShow));
     } else {
       const storagedMovies = JSON.parse(localStorage.getItem('movies'));
       setFilteredMovies(storagedMovies ? storagedMovies : []);
-      setDisplayedMovies(storagedMovies ? storagedMovies.slice(0, 12) : []);
+      setDisplayedMovies(
+        storagedMovies ? storagedMovies.slice(0, moviesToShow) : []
+      );
     }
   }, [isShortMovies]);
 
@@ -111,12 +114,20 @@ function App() {
   }, [filteredMovies]);
 
   useEffect(() => {
-    if (isMobile) {
+    if (isTablet) {
       setMoviesToLoad(2);
     } else {
       setMoviesToLoad(3);
     }
-  }, [isMobile]);
+  }, [isTablet]);
+
+  useEffect(() => {
+    if (isDesktop) {
+      setMoviesToShow(12);
+    } else {
+      setMoviesToShow(5);
+    }
+  }, [isDesktop]);
 
   function loadMoreMovies() {
     if (isShortMovies) {
@@ -151,7 +162,8 @@ function App() {
 
   function updateMedia() {
     setTimeout(() => {
-      setMobile(window.innerWidth < 767);
+      setTablet(window.innerWidth < 1200);
+      setDesktop(window.innerWidth >= 768);
     }, 1000);
   }
 
@@ -176,13 +188,16 @@ function App() {
     }
     if (storagedMovies) {
       setFilteredMovies(storagedMovies);
-      setDisplayedMovies(storagedMovies.slice(0, 12));
+      setDisplayedMovies(storagedMovies.slice(0, moviesToShow));
     } else {
       setFilteredMovies([]);
       setDisplayedMovies([]);
     }
     if (isCheckboxActive) {
       setIsShortMovies(isCheckboxActive);
+      const shortMovies = filterShortMovies(storagedMovies);
+      setFilteredMovies(shortMovies);
+      setDisplayedMovies(shortMovies.slice(0, moviesToShow));
     } else {
       setIsShortMovies(false);
     }
@@ -211,19 +226,11 @@ function App() {
           }
         });
         setFilteredMovies(searchedMovies);
-        if (isMobile) {
-          setDisplayedMovies(searchedMovies.slice(0, 5));
-        } else {
-          setDisplayedMovies(searchedMovies.slice(0, 12));
-        }
+        setDisplayedMovies(searchedMovies.slice(0, moviesToShow));
         if (isShortMovies) {
           const shortSearchedMovies = filterShortMovies(searchedMovies);
           setFilteredMovies(shortSearchedMovies);
-          if (isMobile) {
-            setDisplayedMovies(shortSearchedMovies.slice(0, 5));
-          } else {
-            setDisplayedMovies(shortSearchedMovies.slice(0, 12));
-          }
+          setDisplayedMovies(shortSearchedMovies.slice(0, moviesToShow));
         }
         saveDataInLocalStorage(inputValue, searchedMovies, isShortMovies);
       })
@@ -318,7 +325,7 @@ function App() {
     mainApi
       .register(name, email, password)
       .then((res) => {
-        const { email, name, _id } = res;
+        const { email, name, _id } = res.userWithoutVersion;
         setIsLoggedIn(true);
         setCurrentUser({ email, name, _id });
         setRegisterErrorMessage('');
