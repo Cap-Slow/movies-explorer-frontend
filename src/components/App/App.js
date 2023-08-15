@@ -17,6 +17,15 @@ import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import mainApi from '../../utils/MainApi';
+import {
+  SHORT_MOVIE_DURATION,
+  NUMBER_OF_MOVIES_DESKTOP,
+  NUMBER_OF_MOVIES_MOBILE,
+  MOVIES_TO_ADD_DESKTOP,
+  MOVIES_TO_ADD_MOBILE,
+  SCREEN_WIDTH_DESKTOP,
+  SCREEN_WIDTH_TABLET,
+} from '../../utils/constants';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -33,8 +42,12 @@ function App() {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isSearchError, setIsSearchError] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isTablet, setTablet] = useState(window.innerWidth < 1200);
-  const [isDesktop, setDesktop] = useState(window.innerWidth >= 768);
+  const [isTablet, setTablet] = useState(
+    window.innerWidth < SCREEN_WIDTH_DESKTOP
+  );
+  const [isDesktop, setDesktop] = useState(
+    window.innerWidth >= SCREEN_WIDTH_TABLET
+  );
   const [inputValue, setinputValue] = useState('');
   const [savedMoviesInputValue, setSavedMoviesInputValue] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -132,17 +145,17 @@ function App() {
 
   useEffect(() => {
     if (isTablet) {
-      setMoviesToLoad(2);
+      setMoviesToLoad(MOVIES_TO_ADD_MOBILE);
     } else {
-      setMoviesToLoad(3);
+      setMoviesToLoad(MOVIES_TO_ADD_DESKTOP);
     }
   }, [isTablet]);
 
   useEffect(() => {
     if (isDesktop) {
-      setMoviesToShow(12);
+      setMoviesToShow(NUMBER_OF_MOVIES_DESKTOP);
     } else {
-      setMoviesToShow(5);
+      setMoviesToShow(NUMBER_OF_MOVIES_MOBILE);
     }
   }, [isDesktop]);
 
@@ -166,7 +179,7 @@ function App() {
   }
 
   function filterShortMovies(movies) {
-    return movies.filter((movie) => movie.duration <= 40);
+    return movies.filter((movie) => movie.duration <= SHORT_MOVIE_DURATION);
   }
 
   function handleCheckboxClick() {
@@ -179,8 +192,8 @@ function App() {
 
   function updateMedia() {
     setTimeout(() => {
-      setTablet(window.innerWidth < 1200);
-      setDesktop(window.innerWidth >= 768);
+      setTablet(window.innerWidth < SCREEN_WIDTH_DESKTOP);
+      setDesktop(window.innerWidth >= SCREEN_WIDTH_TABLET);
     }, 1000);
   }
 
