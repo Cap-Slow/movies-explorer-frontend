@@ -20,6 +20,7 @@ import mainApi from '../../utils/MainApi';
 import {
   SHORT_MOVIE_DURATION,
   NUMBER_OF_MOVIES_DESKTOP,
+  NUMBER_OF_MOVIES_TABLET,
   NUMBER_OF_MOVIES_MOBILE,
   MOVIES_TO_ADD_DESKTOP,
   MOVIES_TO_ADD_MOBILE,
@@ -43,10 +44,14 @@ function App() {
   const [isSearchError, setIsSearchError] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [isTablet, setTablet] = useState(
+    window.innerWidth < SCREEN_WIDTH_DESKTOP &&
+      window.innerWidth >= SCREEN_WIDTH_TABLET
+  );
+  const [isMobile, setMobile] = useState(
     window.innerWidth < SCREEN_WIDTH_DESKTOP
   );
   const [isDesktop, setDesktop] = useState(
-    window.innerWidth >= SCREEN_WIDTH_TABLET
+    window.innerWidth >= SCREEN_WIDTH_DESKTOP
   );
   const [inputValue, setinputValue] = useState('');
   const [savedMoviesInputValue, setSavedMoviesInputValue] = useState('');
@@ -144,20 +149,22 @@ function App() {
   }, [filteredMovies]);
 
   useEffect(() => {
-    if (isTablet) {
+    if (isMobile) {
       setMoviesToLoad(MOVIES_TO_ADD_MOBILE);
     } else {
       setMoviesToLoad(MOVIES_TO_ADD_DESKTOP);
     }
-  }, [isTablet]);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isDesktop) {
       setMoviesToShow(NUMBER_OF_MOVIES_DESKTOP);
+    } else if (isTablet) {
+      setMoviesToShow(NUMBER_OF_MOVIES_TABLET);
     } else {
       setMoviesToShow(NUMBER_OF_MOVIES_MOBILE);
     }
-  }, [isDesktop]);
+  }, [isDesktop, isTablet]);
 
   function loadMoreMovies() {
     if (isShortMovies) {
@@ -192,8 +199,12 @@ function App() {
 
   function updateMedia() {
     setTimeout(() => {
-      setTablet(window.innerWidth < SCREEN_WIDTH_DESKTOP);
-      setDesktop(window.innerWidth >= SCREEN_WIDTH_TABLET);
+      setMobile(window.innerWidth < SCREEN_WIDTH_DESKTOP);
+      setDesktop(window.innerWidth >= SCREEN_WIDTH_DESKTOP);
+      setTablet(
+        window.innerWidth < SCREEN_WIDTH_DESKTOP &&
+          window.innerWidth >= SCREEN_WIDTH_TABLET
+      );
     }, 1000);
   }
 
