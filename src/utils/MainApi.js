@@ -42,7 +42,6 @@ class MainApi {
     return this._request(`${this._baseUrl}/signout`, {
       method: 'POST',
       credentials: 'include',
-      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -53,7 +52,6 @@ class MainApi {
     return this._request(`${this._baseUrl}/users/me`, {
       method: 'GET',
       credentials: 'include',
-      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
       },
