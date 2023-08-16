@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
-function NotFoundPage() {
+function NotFoundPage({ isLoggedIn }) {
   const navigate = useNavigate();
 
   function handleGoBack() {
-    navigate(-1);
+    if (isLoggedIn) {
+      navigate(-3);
+    } else {
+      navigate(-1);
+    }
   }
 
   return (
