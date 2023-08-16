@@ -5,7 +5,7 @@ function NotFoundPage({ isLoggedIn }) {
 
   function handleGoBack() {
     if (isLoggedIn) {
-      navigate(-3);
+      navigate(-2);
     } else {
       navigate(-1);
     }
