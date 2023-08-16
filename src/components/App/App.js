@@ -97,18 +97,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getDataFromLocalStorage();
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     if (isLoggedIn) {
-      mainApi
-        .getSavedMovies()
-        .then((res) => {
-          setSavedMovies(res);
+      Promise.all([moviesApi.getMovies(), mainApi.getSavedMovies()])
+        .then(([movies, savedMovies]) => {
+          setMovies(movies);
+          setSavedMovies(savedMovies);
+          setIsSearchError(false);
+          getDataFromLocalStorage(savedMovies);
         })
         .catch((err) => {
           console.log(err);
+          setIsSearchError(true);
         });
     }
   }, [isLoggedIn]);
@@ -219,7 +218,7 @@ function App() {
     localStorage.setItem('isShortMovies', JSON.stringify(isShortMovies));
   }
 
-  function getDataFromLocalStorage() {
+  function getDataFromLocalStorage(savedMovies) {
     const savedInputValue = JSON.parse(localStorage.getItem('inputValue'));
     const storagedMovies = JSON.parse(localStorage.getItem('movies'));
     const isCheckboxActive = JSON.parse(localStorage.getItem('isShortMovies'));
@@ -229,6 +228,15 @@ function App() {
       setinputValue('');
     }
     if (storagedMovies) {
+      const savedMoviesIds = savedMovies.map((movie) => movie.movieId);
+      storagedMovies.forEach((movie) => {
+        if (savedMoviesIds.includes(movie.id)) {
+          movie.owner = currentUser._id;
+          movie._id = savedMovies.find(
+            (savedMovie) => savedMovie.movieId === movie.id
+          )._id;
+        }
+      });
       setFilteredMovies(storagedMovies);
       setDisplayedMovies(storagedMovies.slice(0, moviesToShow));
     } else {
@@ -245,7 +253,9 @@ function App() {
     }
   }
 
-  function handleMoviesResultsFiltration(movies) {
+  function handleMoviesSearch() {
+    setIsFormSubmitted(true);
+    setIsLoading(true);
     let searchedMovies = movies.filter(
       (movie) =>
         movie.nameRU.toLowerCase().includes(inputValue.toLowerCase()) ||
@@ -268,26 +278,6 @@ function App() {
       setDisplayedMovies(shortSearchedMovies.slice(0, moviesToShow));
     }
     saveDataInLocalStorage(inputValue, searchedMovies, isShortMovies);
-  }
-
-  function handleMoviesSearch() {
-    setIsSearchError(false);
-    setIsFormSubmitted(true);
-    setIsLoading(true);
-    if (movies.length === 0) {
-      moviesApi
-        .getMovies()
-        .then((res) => {
-          setMovies(res);
-          handleMoviesResultsFiltration(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsSearchError(true);
-        });
-    } else {
-      handleMoviesResultsFiltration(movies);
-    }
     setIsLoading(false);
   }
 
