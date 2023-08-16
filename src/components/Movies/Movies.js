@@ -46,7 +46,7 @@ function Movies({
           onCheckboxClick={onCheckboxClick}
         />
         {isLoading && <Preloader />}
-        {isError === true && (
+        {isError && isFormSubmitted && (
           <p className="movies__error">
             Во время запроса произошла ошибка. Возможно, проблема с соединением
             или сервер недоступен. Подождите немного и попробуйте ещё раз.
