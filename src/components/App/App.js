@@ -136,6 +136,17 @@ function App() {
       setDisplayedMovies(shortMovies.slice(0, moviesToShow));
     } else {
       const storagedMovies = JSON.parse(localStorage.getItem('movies'));
+      if (storagedMovies) {
+        const savedMoviesIds = savedMovies.map((movie) => movie.movieId);
+        storagedMovies.forEach((movie) => {
+          if (savedMoviesIds.includes(movie.id)) {
+            movie.owner = currentUser._id;
+            movie._id = savedMovies.find(
+              (savedMovie) => savedMovie.movieId === movie.id
+            )._id;
+          }
+        });
+      }
       setFilteredMovies(storagedMovies ? storagedMovies : []);
       setDisplayedMovies(
         storagedMovies ? storagedMovies.slice(0, moviesToShow) : []
@@ -317,6 +328,13 @@ function App() {
           )
         );
         setSavedMovies((state) => [...state, savedMovie]);
+        setFilteredMovies((state) =>
+          state.map((m) =>
+            m.id === savedMovie.movieId
+              ? { ...m, owner: currentUser._id, _id: savedMovie._id }
+              : m
+          )
+        );
         setDisplayedMovies((state) =>
           state.map((m) =>
             m.id === savedMovie.movieId
@@ -336,6 +354,11 @@ function App() {
       .then(() => {
         setSavedMovies((state) => state.filter((m) => m._id !== movie._id));
         setMovies((state) =>
+          state.map((m) =>
+            m.nameRU === movie.nameRU ? { ...m, owner: null } : m
+          )
+        );
+        setFilteredMovies((state) =>
           state.map((m) =>
             m.nameRU === movie.nameRU ? { ...m, owner: null } : m
           )
