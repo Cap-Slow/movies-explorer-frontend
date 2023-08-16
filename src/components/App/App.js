@@ -89,6 +89,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsLoggedIn(false);
       })
       .finally(() => {
         setIsLoadingPage(false);
@@ -483,8 +484,6 @@ function App() {
                     loadMoreMovies={loadMoreMovies}
                     onSaveMovie={handleSaveMovie}
                     onDeleteMovie={handleDeleteMovie}
-                    setCurrentUser={setCurrentUser}
-                    setIsLoggedIn={setIsLoggedIn}
                   ></Movies>
                 </div>
               }
@@ -583,7 +582,7 @@ function App() {
           path="*"
           element={
             <div className="page">
-              <NotFoundPage></NotFoundPage>
+              <NotFoundPage isLoggedIn={isLoggedIn}></NotFoundPage>
             </div>
           }
         />
