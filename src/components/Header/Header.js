@@ -1,9 +1,9 @@
 import logoPath from '../../images/circle-logo.svg';
 import { Link } from 'react-router-dom';
 
-function Header({ children, isLoggedIn }) {
+function Header({ children }) {
   return (
-    <header className={`header ${isLoggedIn ? '' : 'header_theme_pink'}`}>
+    <header className="header">
       <div className="header__container">
         <Link to="/" className="header__link">
           <img

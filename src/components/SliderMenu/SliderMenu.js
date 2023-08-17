@@ -1,45 +1,53 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 function SliderMenu({ isOpen, onClose }) {
   const navigate = useNavigate();
 
   return (
     <nav className={`slider-menu ${isOpen ? 'slider-menu_opened' : ''}`}>
-      <div className="slider-menu__text-button-container">
-        <button
-          onClick={() => {
-            navigate('/');
-          }}
-          className="slider-menu__text-button"
+      <div className="slider-menu__nav-link-container">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `${
+              isActive ? 'slider-menu__nav-link_type_active' : ''
+            } slider-menu__nav-link`
+          }
         >
           Главная
-        </button>
-        <button
-          onClick={() => {
-            navigate('/movies');
-          }}
-          className="slider-menu__text-button slider-menu__text-button_type_underline"
+        </NavLink>
+        <NavLink
+          to="/movies"
+          className={({ isActive }) =>
+            `${
+              isActive ? 'slider-menu__nav-link_type_active' : ''
+            } slider-menu__nav-link`
+          }
         >
           Фильмы
-        </button>
-        <button
-          onClick={() => {
-            navigate('/saved-movies');
-          }}
-          className="slider-menu__text-button"
+        </NavLink>
+        <NavLink
+          to="/saved-movies"
+          className={({ isActive }) =>
+            `${
+              isActive ? 'slider-menu__nav-link_type_active' : ''
+            } slider-menu__nav-link`
+          }
         >
           Сохранённые фильмы
-        </button>
+        </NavLink>
       </div>
       <div className="slider-menu__account-section">
-        <button
-          onClick={() => {
-            navigate('/profile');
-          }}
-          className="slider-menu__text-button slider-menu__link_text_small"
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `${
+              isActive ? 'slider-menu__nav-link_type_active' : ''
+            } slider-menu__nav-link slider-menu__link_text_small`
+          }
         >
           Аккаунт
-        </button>
+        </NavLink>
         <button
           onClick={() => {
             navigate('/profile');

@@ -1,103 +1,131 @@
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
 import SliderMenu from '../SliderMenu/SliderMenu';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext, useEffect, useCallback } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import {
+  handleInputChange,
+  checkProfileValidity,
+} from '../../utils/formValidation';
 
-function Profile({ onMenuOpen, isMenuOpen, closeMenu }) {
-  const [isEditableForm, setIsEditableForm] = useState(false);
-  const [name, setName] = useState('Дмитрий');
-  const [email, setEmail] = useState('pochta@yandex.ru');
-  const [isProfileUpdateError, setIsProfileUpdateError] = useState(false);
-  const navigate = useNavigate();
+function Profile({
+  onMenuOpen,
+  isMenuOpen,
+  closeMenu,
+  onSignOut,
+  isProfileFormOpen,
+  onEditFormOpen,
+  onProfileUpdate,
+  isSuccessProfileUpdate,
+  profileUpdateMessage,
+  isProfileFormSubmitted,
+}) {
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
+  const currentUser = useContext(CurrentUserContext);
 
-  function editForm() {
-    setIsEditableForm(true);
-    setIsProfileUpdateError(true);
+  function handleProfileInputChange(e) {
+    handleInputChange(e, values, errors, setValues, setErrors);
   }
-  function handleSubmit(e) {
+
+  useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setValues(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setValues, setErrors, setIsValid]
+  );
+
+  useEffect(() => {
+    setIsValid(checkProfileValidity(errors, values, currentUser));
+  }, [errors, values, currentUser]);
+
+  useEffect(() => {
+    setValues(currentUser);
+  }, [currentUser]);
+
+  function handleProfileUpdate(e) {
     e.preventDefault();
-    setIsEditableForm(false);
-    setIsProfileUpdateError(false);
-  }
-
-  function handleNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+    onProfileUpdate(values);
   }
 
   return (
     <>
-      <Header isLoggedIn={true}>
+      <Header>
         <Navigation onMenuOpen={onMenuOpen} />
         <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
       </Header>
       <section className="profile">
         <div className="profile__container">
-          <h2 className="profile__title">Привет, Дмитрий!</h2>
+          <h2 className="profile__title">Привет, {currentUser.name}!</h2>
           <form className="profile__form-container">
             <div className="profile__row-container">
               <p className="profile__info-label">Имя</p>
               <input
                 className="profile__input"
                 type="text"
+                name="name"
+                value={values.name || ''}
                 required
-                value={name}
-                disabled={!isEditableForm}
-                onChange={handleNameChange}
+                disabled={!isProfileFormOpen}
+                onChange={handleProfileInputChange}
                 minLength="2"
                 placeholder="Введите имя"
               />
             </div>
+            <span className="profile__error-message">{errors.name}</span>
             <div className="profile__row-container">
               <label className="profile__info-label">E-mail</label>
               <input
                 className="profile__input"
                 type="email"
+                name="email"
+                value={values.email || ''}
                 required
-                value={email}
-                disabled={!isEditableForm}
-                onChange={handleEmailChange}
+                disabled={!isProfileFormOpen}
+                onChange={handleProfileInputChange}
                 placeholder="Введите E-mail"
               />
             </div>
+            <span className="profile__error-message">{errors.email}</span>
+
             <p
-              className={`profile__error-message ${
-                isProfileUpdateError
-                  ? 'profile__error-message_type_visible'
-                  : ''
-              }  `}
+              className={`profile__update-message ${
+                isSuccessProfileUpdate
+                  ? 'profile__success-message'
+                  : 'profile__update-message_type_error'
+              }`}
             >
-              При обновлении профиля произошла ошибка.
+              {profileUpdateMessage}
             </p>
-            {!isEditableForm && (
+            {!isProfileFormOpen && (
               <button
                 type="button"
-                className="profile__button "
-                onClick={editForm}
+                className="profile__button"
+                onClick={onEditFormOpen}
               >
                 Редактировать
               </button>
             )}
-            {!isEditableForm && (
+            {!isProfileFormOpen && (
               <button
                 type="button"
-                onClick={() => {
-                  navigate('/signin');
-                }}
+                onClick={onSignOut}
                 className="profile__button profile__button_color_red"
               >
                 Выйти из аккаунта
               </button>
             )}
-            {isEditableForm && (
+            {isProfileFormOpen && (
               <button
                 type="submit"
-                className="profile__save-button"
-                onClick={handleSubmit}
+                disabled={!isValid || isProfileFormSubmitted}
+                className={`profile__save-button ${
+                  !isValid ? 'profile__save-button_type_disabled' : ''
+                }`}
+                onClick={handleProfileUpdate}
               >
                 Сохранить
               </button>

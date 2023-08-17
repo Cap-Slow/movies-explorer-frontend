@@ -1,7 +1,14 @@
 import AuthPage from '../AuthPage/AuthPage';
 
-function Login() {
-  return <AuthPage isLoginPage={true}></AuthPage>;
+function Login({ onLogin, errorMessage, isInputDisabled }) {
+  return (
+    <AuthPage
+      isLoginPage={true}
+      onLogin={onLogin}
+      loginErrorMessage={errorMessage}
+      isInputDisabled={isInputDisabled}
+    ></AuthPage>
+  );
 }
 
 export default Login;

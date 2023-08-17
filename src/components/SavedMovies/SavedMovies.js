@@ -1,46 +1,56 @@
-import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
-import SliderMenu from '../SliderMenu/SliderMenu';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import MoviesCard from '../MoviesCard/MoviesCard';
 import Footer from '../Footer/Footer';
-import firstImagePath from '../../images/movie-placeholders/33slova.jpg';
-import secondImagePath from '../../images/movie-placeholders/second-image.jpg';
-import thirdImagePath from '../../images/movie-placeholders/third-image.jpg';
+import Preloader from '../Preloader/Preloader';
+import { useState } from 'react';
 
-function SavedMovies({ isMenuOpen, closeMenu, onMenuOpen }) {
+function SavedMovies({
+  savedMovies,
+  onMoviesSearch,
+  inputValue,
+  onInputChange,
+  isShortMovies,
+  onCheckboxClick,
+  onDeleteMovie,
+  isSavedMoviesPage,
+  isLoading,
+}) {
+  const [isInputError, setIsInputError] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+  function handleinputValueChange(e) {
+    onInputChange(e);
+    setIsInputError(false);
+    setIsFormSubmitted(false);
+  }
+
+  function handleSearchFormSubmit(e) {
+    e.preventDefault();
+    setIsFormSubmitted(true);
+    onMoviesSearch(inputValue);
+  }
+
   return (
     <>
-      <Header isLoggedIn={true}>
-        <Navigation onMenuOpen={onMenuOpen} />
-        <SliderMenu isOpen={isMenuOpen} onClose={closeMenu} />
-      </Header>
       <section className="saved-movies">
-        <SearchForm />
-        <MoviesCardList isMoviesPage={false}>
-          <MoviesCard
-            title={'33 слова о дизайне'}
-            duration={'1ч 17м'}
-            imageLink={firstImagePath}
-          >
-            <button className="movies-card__delete-icon movies-card__save-element"></button>
-          </MoviesCard>
-          <MoviesCard
-            title={'Киноальманах «100 лет дизайна»'}
-            duration={'1ч 17м'}
-            imageLink={secondImagePath}
-          >
-            <button className="movies-card__delete-icon movies-card__save-element"></button>
-          </MoviesCard>
-          <MoviesCard
-            title={'В погоне за Бенкси'}
-            duration={'1ч 17м'}
-            imageLink={thirdImagePath}
-          >
-            <button className="movies-card__delete-icon movies-card__save-element"></button>
-          </MoviesCard>
-        </MoviesCardList>
+        <SearchForm
+          onInputChange={handleinputValueChange}
+          onFormSubmit={handleSearchFormSubmit}
+          isInputError={isInputError}
+          inputValue={inputValue}
+          isShortMovies={isShortMovies}
+          onCheckboxClick={onCheckboxClick}
+        />
+        {isLoading && <Preloader />}
+
+        {savedMovies.length === 0 && isFormSubmitted && (
+          <p className="movies__not-found-element">Ничего не найдено.</p>
+        )}
+        <MoviesCardList
+          movies={savedMovies}
+          onDeleteMovie={onDeleteMovie}
+          isSavedMoviesPage={isSavedMoviesPage}
+        ></MoviesCardList>
       </section>
       <Footer />
     </>
